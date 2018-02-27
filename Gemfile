@@ -9,8 +9,11 @@ case rails_version
 when /master/
   gem 'rails', github: 'rails/rails'
   gem 'arel', github: 'rails/arel'
+when /^3-/
+  gem 'rails', github: 'rails/rails', branch: rails_version
+  gem 'strong_parameters'
 when /-stable$/
   gem 'rails', github: 'rails/rails', branch: rails_version
 else
-  gem 'rails', ENV['RAILS_VERSION']
+  gem 'rails', rails_version
 end
