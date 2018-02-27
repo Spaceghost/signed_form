@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "activemodel", ">= 3.0"
   spec.add_development_dependency "coveralls"
 
-  spec.add_dependency "actionpack", ">= 3.1"
+  spec.add_dependency "actionpack", ">= 3.0"
   spec.add_dependency "psych", ">= 2.0"
 
   spec.required_ruby_version = '>= 1.9'
