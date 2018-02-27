@@ -9,7 +9,7 @@ case rails_version
 when /master/
   gem 'rails', github: 'rails/rails'
   gem 'arel', github: 'rails/arel'
-when /^3-/
+when /^3-2/
   gem 'rails', github: 'rails/rails', branch: rails_version
   gem 'strong_parameters'
 when /-stable$/
