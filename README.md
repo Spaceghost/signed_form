@@ -84,8 +84,8 @@ The second two methods of security are optional and can be turned off globally o
 
 SignedForm requires:
 
-* Ruby 1.9 or later
-* Rails 4 or Rails 3.1+ ([strong_parameters](https://github.com/rails/strong_parameters) gem
+* Ruby 2.0 or later
+* Rails 4 or Rails 3.2+ ([strong_parameters](https://github.com/rails/strong_parameters) gem
   required for Rails 3)
 
 ## Installation
