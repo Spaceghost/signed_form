@@ -2,18 +2,11 @@ script: bundle exec rspec
 language: ruby
 
 rvm:
-  - 2.2.9
-  - 2.3.6
   - 2.4.3
   - 2.5.0
 
 env:
-  - RAILS_VERSION=3-2-stable
-  - RAILS_VERSION=4-0-stable
-  - RAILS_VERSION=4-1-stable
   - RAILS_VERSION=4-2-stable
-  - RAILS_VERSION=5-0-stable
-  - RAILS_VERSION=5-1-stable
   - RAILS_VERSION=5-2-stable
   - RAILS_VERSION=master
 
