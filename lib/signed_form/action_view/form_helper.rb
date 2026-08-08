@@ -72,7 +72,8 @@ module SignedForm
       end
 
       def signed_form_body(form, &block)
-        form.form_signature_tag + capture(form, &block)
+        body = capture(form, &block)
+        form.form_signature_tag + body
       end
 
       def signed_form_destination(record, options)
