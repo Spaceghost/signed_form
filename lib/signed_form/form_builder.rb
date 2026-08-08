@@ -52,11 +52,7 @@ module SignedForm
     def form_signature_tag
       @signed_attributes.each { |k,v| v.uniq! if v.is_a?(Array) }
       recursive_merge_identical_hashes! @signed_attributes
-      encoded_data = Base64.strict_encode64 Marshal.dump(@signed_attributes)
-
-      hmac = SignedForm::HMAC.new(secret_key: SignedForm.secret_key)
-      signature = hmac.create(encoded_data)
-      token = "#{encoded_data}--#{signature}"
+      token = SignedForm.tokenize(@signed_attributes)
       %(<input type="hidden" name="form_signature" value="#{token}" />\n).html_safe
     end
 
