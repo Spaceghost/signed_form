@@ -1,13 +1,9 @@
 # SignedForm
 
-[![Gem Version](https://badge.fury.io/rb/signed_form.png)](http://badge.fury.io/rb/signed_form)
-![.github/workflows/tests.yml](https://github.com/erichmenge/signed_form/workflows/.github/workflows/tests.yml/badge.svg)
-[![Code Climate](https://codeclimate.com/github/erichmenge/signed_form.png)](https://codeclimate.com/github/erichmenge/signed_form)
-[![Coverage Status](https://coveralls.io/repos/erichmenge/signed_form/badge.png?branch=master)](https://coveralls.io/r/erichmenge/signed_form)
-[![Inline docs](http://inch-ci.org/github/erichmenge/signed_form.svg?branch=master&style=flat)](https://inch-ci.org/github/erichmenge/signed_form)
+[![Gem Version](https://badge.fury.io/rb/signed_form.png)](https://badge.fury.io/rb/signed_form)
+[![Tests](https://github.com/Spaceghost/signed_form/actions/workflows/tests.yml/badge.svg)](https://github.com/Spaceghost/signed_form/actions/workflows/tests.yml)
 
-SignedForm brings new convenience and security to your Rails 5 or Rails 4  
-application.
+SignedForm brings signed-field convenience and security to Rails 8.1 and Rails 8.0 applications.
 
 SignedForm is under active development. Please make sure you're reading the  
 README associated with the version of SignedForm you're using. Click the tag  
@@ -15,9 +11,6 @@ link on GitHub to switch to the version you've installed to get the correct
 README.
 
 Or be brave and bundle the gem straight from GitHub master.
-
-A nicely displayed version of this README complete with table of contents is  
-available [here](http://erichmenge.com/signed_form/).
 
 ## How It Works
 
@@ -49,7 +42,7 @@ What this looks like:
 UsersController < ApplicationController
   def update
     @user = User.find params[:id]
-    @user.update_attributes params[:user]
+    @user.update params[:user]
   end
 end
 ```
@@ -90,10 +83,12 @@ or on a form by form basis.
 
 ## Requirements
 
-SignedForm requires:
+SignedForm's current tested support line is:
 
-* Ruby 2.4.3 or 2.5.0
-* Rails 4.2-stable, Rails 5.2-stable, or Rails master
+* Ruby 3.2 through 3.5
+* Rails 8.0.5 and Rails 8.1.3
+
+CI also tracks Rails `main` as a non-blocking early-warning job. The gemspec remains permissive for older applications while the revived test suite establishes the modern compatibility floor.
 
 [strong_parameters]: https://github.com/rails/strong_parameters
 
