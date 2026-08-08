@@ -1,3 +1,4 @@
+require 'digest/md5'
 require 'set'
 
 module SignedForm
@@ -12,13 +13,13 @@ module SignedForm
 
     def <<(template)
       virtual_path = get_virtual_path(template)
-      raise Errors::UnableToDigest, "Unable to get virtual path from template" unless virtual_path
+      raise Errors::UnableToDigest, 'Unable to get virtual path from template' unless virtual_path
 
       @views << virtual_path
       @view_paths += template.view_paths.map(&:to_s)
       @digest = nil
     rescue NoMethodError
-      raise Errors::UnableToDigest, "Unable get view paths from template"
+      raise Errors::UnableToDigest, 'Unable get view paths from template'
     end
 
     def marshal_dump
@@ -28,7 +29,6 @@ module SignedForm
     def marshal_load(input)
       @views, @digest = input
       @view_paths = []
-      @digest.taint
     end
 
     def to_s
@@ -51,7 +51,7 @@ module SignedForm
     end
 
     def hash_files(files)
-      raise Errors::UnableToDigest, "No files to digest" if files.empty?
+      raise Errors::UnableToDigest, 'No files to digest' if files.empty?
 
       md5 = Digest::MD5.new
       files.sort.each do |entry|
