@@ -50,10 +50,14 @@ RSpec.describe 'SignedForm form-to-controller contract' do
     Marshal.load(Base64.strict_decode64(data))
   end
 
+  def user_allowlist(payload)
+    payload.key?('user') ? payload['user'] : payload.fetch(:user)
+  end
+
   def tamper_allowlist(token)
     data, signature = token.split('--', 2)
     payload = Marshal.load(Base64.strict_decode64(data))
-    payload['user'] << :admin
+    user_allowlist(payload) << :admin
     tampered_data = Base64.strict_encode64(Marshal.dump(payload))
     "#{tampered_data}--#{signature}"
   end
@@ -80,7 +84,7 @@ RSpec.describe 'SignedForm form-to-controller contract' do
   it 'puts the rendered field and POST destination inside the authenticated token' do
     payload = token_payload(signed_form_token)
 
-    expect(payload['user']).to eq([:name])
+    expect(user_allowlist(payload)).to eq([:name])
     expect(payload[:_options_]).to include(method: :post, url: '/users')
   end
 
