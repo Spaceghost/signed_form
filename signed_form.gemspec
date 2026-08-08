@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["erichmenge@gmail.com", "Johnneylee.Rollins@gmail.com"]
   spec.description   = %q{Rails signed form security}
   spec.summary       = %q{Rails signed form security}
-  spec.homepage      = "https://github.com/erichmenge/signed_form"
+  spec.homepage      = "https://github.com/Spaceghost/signed_form"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -18,11 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec", "~> 2.13"
+  spec.add_development_dependency "rspec", "~> 3.13"
   spec.add_development_dependency "activemodel", ">= 4.2"
-  spec.add_development_dependency "coveralls"
 
   spec.add_dependency "actionpack", ">= 4.2"
   spec.add_dependency "psych", ">= 2.0"
