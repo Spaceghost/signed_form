@@ -1,3 +1,4 @@
+require 'rails'
 require 'action_view'
 require 'action_view/template'
 require 'action_controller'
