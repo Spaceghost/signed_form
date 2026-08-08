@@ -85,10 +85,10 @@ or on a form by form basis.
 
 SignedForm's current tested support line is:
 
-* Ruby 3.2 through 3.5
+* Ruby 3.2 through 3.4
 * Rails 8.0.5 and Rails 8.1.3
 
-CI also tracks Rails `main` as a non-blocking early-warning job. The gemspec remains permissive for older applications while the revived test suite establishes the modern compatibility floor.
+The gemspec remains permissive for older applications while the revived test suite establishes the modern compatibility floor.
 
 [strong_parameters]: https://github.com/rails/strong_parameters
 
