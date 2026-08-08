@@ -42,7 +42,7 @@ RSpec.describe 'SignedForm form-to-controller contract' do
     options[:method] = method if method
 
     html = form_with(**options) { |form| form.text_field(:name) }
-    html.match(/name="form_signature" value="([^"]+)"/).fetch(1)
+    html.match(/name="form_signature" value="([^"]+)"/)[1]
   end
 
   def token_payload(token)
@@ -87,8 +87,10 @@ RSpec.describe 'SignedForm form-to-controller contract' do
   it 'round-trips a rendered signed form through the real strong-parameters path' do
     token = signed_form_token
     controller = contract_controller(
-      'user' => { 'name' => 'Ada', 'admin' => '1' },
-      'form_signature' => token
+      {
+        'user' => { 'name' => 'Ada', 'admin' => '1' },
+        'form_signature' => token
+      }
     )
 
     controller.permit_signed_form_data
@@ -103,12 +105,14 @@ RSpec.describe 'SignedForm form-to-controller contract' do
       'user' => [:name, { preferences: [:theme] }]
     )
     controller = contract_controller(
-      'user' => {
-        'name' => 'Ada',
-        'admin' => '1',
-        'preferences' => { 'theme' => 'dark', 'role' => 'root' }
-      },
-      'form_signature' => token
+      {
+        'user' => {
+          'name' => 'Ada',
+          'admin' => '1',
+          'preferences' => { 'theme' => 'dark', 'role' => 'root' }
+        },
+        'form_signature' => token
+      }
     )
 
     controller.permit_signed_form_data
@@ -122,8 +126,10 @@ RSpec.describe 'SignedForm form-to-controller contract' do
   it 'rejects a client that adds a field to the signed allowlist without the key' do
     token = tamper_allowlist(signed_form_token)
     controller = contract_controller(
-      'user' => { 'name' => 'Ada', 'admin' => '1' },
-      'form_signature' => token
+      {
+        'user' => { 'name' => 'Ada', 'admin' => '1' },
+        'form_signature' => token
+      }
     )
 
     expect { controller.permit_signed_form_data }
@@ -193,7 +199,7 @@ RSpec.describe 'SignedForm form-to-controller contract' do
 
   it 'leaves an unsigned POST unpermitted instead of silently trusting it' do
     controller = contract_controller(
-      'user' => { 'name' => 'Ada', 'admin' => '1' }
+      { 'user' => { 'name' => 'Ada', 'admin' => '1' } }
     )
 
     expect { controller.permit_signed_form_data }.not_to raise_error
