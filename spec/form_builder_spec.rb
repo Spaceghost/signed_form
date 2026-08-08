@@ -59,6 +59,7 @@ describe SignedForm::FormBuilder do
               '</form>'
 
       content.should =~ Regexp.new(regex, Regexp::MULTILINE)
+      content.scan('name="form_signature"').size.should == 1
     end
 
     it "should not sign if no option is present" do
@@ -90,6 +91,45 @@ describe SignedForm::FormBuilder do
     end
   end
 
+  describe "form_with tag" do
+    it "should build a form with one signature" do
+      content = form_with(model: User.new, url: '/users', signed: true) do |f|
+        f.text_field :name
+      end
+
+      data = get_data_from_form(content)
+      data['user'].should include(:name)
+      content.scan('name="form_signature"').size.should == 1
+    end
+
+    it "should not sign if no option is present" do
+      content = form_with(model: User.new, url: '/users') do |f|
+        f.text_field :name
+      end
+
+      content.should_not include('form_signature')
+    end
+
+    it "should honor the global default and an explicit opt-out" do
+      SignedForm.options[:signed] = true
+
+      signed_content = form_with(model: User.new, url: '/users') { |f| f.text_field :name }
+      unsigned_content = form_with(model: User.new, url: '/users', signed: false) { |f| f.text_field :name }
+
+      signed_content.should include('form_signature')
+      unsigned_content.should_not include('form_signature')
+    end
+
+    it "should sign the resolved destination" do
+      content = form_with(model: User.new, url: '/users', signed: true, sign_destination: true) do |f|
+        f.text_field :name
+      end
+
+      data = get_data_from_form(content)
+      data[:_options_][:method].should == :post
+      data[:_options_][:url].should == '/users'
+    end
+  end
   describe "third party builders" do
     it "should build a signed form" do
       content = form_for(User.new, signed: true, builder: MockBuilder) do |f|

@@ -29,7 +29,7 @@ no more `attr_accessible`. It just works.
 What this looks like:
 
 ```erb
-<%= form_for @user, signed: true do |f| %>
+<%= form_with model: @user, signed: true do |f| %>
   <% f.add_signed_fields :zipcode, :state # add additional fields to sign %>
 
   <%= f.text_field :name %>
@@ -39,7 +39,7 @@ What this looks like:
 ```
 
 ```ruby
-UsersController < ApplicationController
+class UsersController < ApplicationController
   def update
     @user = User.find params[:id]
     @user.update params[:user]
@@ -50,7 +50,7 @@ end
 Disabled fields need to be explicitly signed:
 
 ```erb
-<%= form_for @user, signed: true do |f| %>
+<%= form_with model: @user, signed: true do |f| %>
 <% f.add_signed_fields :name %>
 
 <%= f.text_field :name, disabled: true %>
@@ -61,8 +61,7 @@ Disabled fields need to be explicitly signed:
 That's it. You're done. Need to add a field? Pop it in the form. You don't need  
 to then update a list of attributes.
 
-Of course, you're free to continue using the standard `form_for`. `SignedForm`  
-is strictly opt-in. It won't change the way you use standard forms.
+`SignedForm` is strictly opt-in. Rails 8's `form_with` is the primary API, and legacy `form_for` remains supported. Unsigned forms keep Rails' normal behavior.
 
 ## Is it any good?
 
@@ -118,8 +117,7 @@ end
 
 ## Support for other Builders
 
-Any form that wraps `form_for` and the default field helpers will work with  
-SignedForm. For example, a signed SimpleForm might look like this:
+Builders that wrap Rails `form_with` or `form_for` and the default field helpers work with SignedForm. For example, a signed SimpleForm might look like this:
 
 ```erb
 <%= simple_form_for @user, signed: true do |f| %>
