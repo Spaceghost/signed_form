@@ -137,9 +137,16 @@ describe SignedForm::FormBuilder do
       @data['user'].should include({:options=>[]})
     end
 
-    it "should add to the allowed attributes when collection_check_boxes is used", action_pack: /4\.\d+/ do
+    it "should add to the allowed attributes when collection_check_boxes is used" do
       content = form_for(User.new, signed: true) do |f|
         f.collection_check_boxes :options, ['a', 'b'], :to_s, :to_s
+      end
+
+      @data = get_data_from_form(content)
+    end
+    it "should add to the allowed attributes when collection_checkboxes is used" do
+      content = form_for(User.new, signed: true) do |f|
+        f.collection_checkboxes :options, ['a', 'b'], :to_s, :to_s
       end
 
       @data = get_data_from_form(content)
@@ -158,18 +165,14 @@ describe SignedForm::FormBuilder do
   end
 
   describe "form inputs" do
-    fields  = ActionView::Helpers::FormBuilder.instance_methods - Object.instance_methods
-    fields -= [:button, :multipart=, :submit, :fields,
-               :field_helpers, :label, :multipart,
-               :emitted_hidden_id?, :to_model, :field_helpers?,
-               :field_helpers=, :fields_for, :object_name=,
-               :object=, :object_name, :model_name_from_record_or_class,
-               :multipart?, :options, :options=,
-               :convert_to_model, :to_partial_path, :index,
-               :object, :radio_button, :parent_builder,
-               :collection_check_boxes, :grouped_collection_select, :select,
-               :collection_select, :collection_radio_buttons, :time_select,
-               :datetime_select, :time_zone_select, :date_select, :search_field]
+    complex_fields = [
+      :select, :collection_select, :grouped_collection_select,
+      :collection_check_boxes, :collection_checkboxes, :collection_radio_buttons,
+      :date_select, :datetime_select, :time_select, :time_zone_select, :radio_button
+    ]
+    fields = SignedForm::FormBuilder::FIELDS_TO_SIGN.map do |field|
+      field.is_a?(Symbol) ? field : field.keys.first
+    end.uniq - complex_fields
 
     after do
       @data['user'].size.should == 1
@@ -214,7 +217,7 @@ describe SignedForm::FormBuilder do
       @data = get_data_from_form(content)
     end
 
-    it "should add to the allowed attributes when collection_radio_buttons is used", action_pack: /4\.\d+/ do
+    it "should add to the allowed attributes when collection_radio_buttons is used" do
       content = form_for(User.new, signed: true) do |f|
         f.collection_radio_buttons :name, %w(a b), :to_s, :to_s
       end
@@ -281,7 +284,7 @@ describe SignedForm::FormBuilder do
       @data['user'].should include({:name => []})
     end
 
-    it "should add a hash with an empty array when collection_check_boxes is used", action_pack: /4\.\d+/ do
+    it "should add a hash with an empty array when collection_check_boxes is used" do
       content = form_for(User.new, signed: true) do |f|
         f.collection_check_boxes :name, ['a', 'b'], :to_s, :to_s
       end
@@ -305,7 +308,7 @@ describe SignedForm::FormBuilder do
       @data['user'].should_not include({:name => []})
     end
 
-    it "shouldn't add a hash with an empty array when collection_radio_buttons is used", action_pack: /4\.\d+/ do
+    it "shouldn't add a hash with an empty array when collection_radio_buttons is used" do
       content = form_for(User.new, signed: true) do |f|
         f.collection_radio_buttons :name, ['a', 'b'], :to_s, :to_s
       end

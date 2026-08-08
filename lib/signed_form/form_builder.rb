@@ -2,10 +2,11 @@ module SignedForm
   module FormBuilder
     FIELDS_TO_SIGN = [{:select => :multiple_select?}, {:collection_select => :multiple_select?},
                       {:grouped_collection_select => :multiple_select?},
-                      :time_zone_select, :collection_radio_buttons, {:collection_check_boxes => []},
-                      :date_select, :datetime_select, :time_select,
+                      :time_zone_select, :collection_radio_buttons,
+                      {:collection_check_boxes => []}, {:collection_checkboxes => []},
+                      :date_select, :datetime_select, :time_select, :weekday_select,
                       :text_field, :password_field, :hidden_field,
-                      :file_field, :text_area, :check_box,
+                      :file_field, :text_area, :textarea, :check_box, :checkbox,
                       :radio_button, :color_field,
                       :telephone_field, :phone_field, :date_field,
                       :time_field, :datetime_field, :datetime_local_field,
@@ -97,8 +98,11 @@ module SignedForm
       @signed_attributes[:_options_] = {}
 
       if options[:sign_destination]
-        @signed_attributes[:_options_][:method] = options[:html][:method]
-        @signed_attributes[:_options_][:url]    = options[:url]
+        destination = options[:signed_form_destination] || {}
+        html_method = options[:html][:method] if options[:html].is_a?(Hash)
+
+        @signed_attributes[:_options_][:method] = destination.key?(:method) ? destination[:method] : html_method
+        @signed_attributes[:_options_][:url] = destination.key?(:url) ? destination[:url] : options[:url]
       end
 
       if options[:digest]

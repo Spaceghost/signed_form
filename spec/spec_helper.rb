@@ -1,14 +1,9 @@
+require 'rails'
 require 'action_view'
 require 'action_view/template'
 require 'action_controller'
 require 'active_model'
-require 'action_controller'
 require 'active_support/core_ext'
-
-require 'coveralls'
-Coveralls.wear! do
-  add_filter "/spec/"
-end
 
 require 'signed_form'
 
@@ -60,17 +55,20 @@ module SignedFormViewHelper
 end
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
-  config.run_all_when_everything_filtered = true
+  config.expect_with :rspec do |expectations|
+    expectations.syntax = %i[should expect]
+  end
+
+  config.mock_with :rspec do |mocks|
+    mocks.syntax = %i[should expect]
+  end
 
   config.filter_run_excluding action_pack: ->(version) { ActionPack::VERSION::STRING.match(/\d+\.\d+/)[0] !~ version }
-
   config.order = 'random'
 
-  config.around(:each) do |example|
-    pristine_module = SignedForm.dup
-    example.run
-    Object.send :remove_const, :SignedForm
-    SignedForm = pristine_module
+  config.after do
+    SignedForm.secret_key = nil
+    SignedForm.options = SignedForm::DEFAULT_OPTIONS.dup
+    SignedForm.digest_store = SignedForm::DigestStores::NullStore.new
   end
 end

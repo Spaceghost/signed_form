@@ -23,7 +23,7 @@ describe SignedForm::ActionController::PermitSignedParams do
     "#{encoded_data}--#{signature}"
   end
 
-  Object.send(:remove_const, :Rails) if defined?(Rails)
+  before { hide_const('Rails') }
 
   before do
     SignedForm.secret_key = "abc123"

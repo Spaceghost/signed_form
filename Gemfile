@@ -3,12 +3,11 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in signed_form.gemspec
 gemspec
 
-rails_version = ENV['RAILS_VERSION'] || 'master'
+rails_version = ENV.fetch('RAILS_VERSION', '8.1.3')
 
 case rails_version
-when /master/
+when 'main', 'master'
   gem 'rails', github: 'rails/rails'
-  gem 'arel', github: 'rails/arel'
 when /-stable$/
   gem 'rails', github: 'rails/rails', branch: rails_version
 else
