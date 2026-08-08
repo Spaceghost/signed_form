@@ -97,8 +97,11 @@ module SignedForm
       @signed_attributes[:_options_] = {}
 
       if options[:sign_destination]
-        @signed_attributes[:_options_][:method] = options[:html][:method]
-        @signed_attributes[:_options_][:url]    = options[:url]
+        destination = options[:signed_form_destination] || {}
+        html_method = options[:html][:method] if options[:html].is_a?(Hash)
+
+        @signed_attributes[:_options_][:method] = destination.key?(:method) ? destination[:method] : html_method
+        @signed_attributes[:_options_][:url] = destination.key?(:url) ? destination[:url] : options[:url]
       end
 
       if options[:digest]
